@@ -103,7 +103,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
-        return string(abi.encodePacked(baseUri, Strings.toString(tiers[id])));
+        return string(abi.encodePacked(baseUri, Strings.toString(tierOf[id])));
     }
 
     function supportsInterface(bytes4 interfaceId)
