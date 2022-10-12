@@ -4,9 +4,10 @@ pragma solidity ^0.8.13;
 import {ERC721} from "solmate/tokens/ERC721.sol";
 import "juice-contracts-v2/JBETHERC20ProjectPayer.sol";
 import {ReentrancyGuard} from "solmate/utils/ReentrancyGuard.sol";
+import {Strings} from "openzeppelin-contracts/utils/Strings.sol";
 
 contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
-    mapping(uint256 => string) public tiers;
+    mapping(uint256 => uint256) public tiers;
     uint256 private projectId;
     string public baseUri;
     uint256 public totalSupply;
@@ -46,7 +47,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
         unchecked {
             ++totalSupply;
         }
-        super._mint(msg.sender, tokenId);
+        _mint(_to, tokenId);
     }
 
     // Public Mint
@@ -98,7 +99,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
-        return string(abi.encodePacked(baseUri, string(tiers[id])));
+        return string(abi.encodePacked(baseUri, Strings.toString(tiers[id])));
     }
 
     function supportsInterface(bytes4 interfaceId)
