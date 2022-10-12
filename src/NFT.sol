@@ -52,16 +52,14 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
 
     // Public Mint
     function mint() external payable nonReentrant {
-        require(msg.value >= 0.1 ether, "Minimum price 0.1 ETH");
-        //pay jb
         uint256 tier;
-        if (msg.value >= 10) {
+        if (msg.value >= 10 ether) {
             tier = 3;
-        } else if (msg.value >= 1) {
+        } else if (msg.value >= 1 ether) {
             tier = 2;
-        } else if (msg.value >= 0.1) {
+        } else if (msg.value >= 0.1 ether) {
             tier = 1;
-        } else if (msg.value < 0.1) {
+        } else if (msg.value < 0.1 ether) {
             revert("Minimum price 0.1 ETH");
         }
         _pay(
