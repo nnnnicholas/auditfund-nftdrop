@@ -7,11 +7,11 @@ import {ReentrancyGuard} from "solmate/utils/ReentrancyGuard.sol";
 import {Strings} from "openzeppelin-contracts/utils/Strings.sol";
 
 contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
-    mapping(uint256 => uint256) public tiers;
-    uint256 private projectId;
+    mapping(uint256 => uint256) public tierOf; // TODO rename tierOf
+    uint256 private immutable projectId;
     string public baseUri;
     uint256 public totalSupply;
-    uint256 private deadline;
+    uint256 private immutable deadline;
 
     constructor(
         string memory _name, // NFT Rewards Audit Fund
@@ -43,7 +43,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
         require(block.timestamp < deadline, "Deadline over");
         require(_tier > 0 && _tier < 4, "Tier out of range");
         uint256 tokenId = totalSupply + 1;
-        tiers[tokenId] = _tier;
+        tierOf[tokenId] = _tier;
         unchecked {
             ++totalSupply;
         }
@@ -55,12 +55,14 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
         require(msg.value >= 0.1 ether, "Minimum price 0.1 ETH");
         //pay jb
         uint256 tier;
-        if (msg.value >= 0.1 ether && msg.value < 1 ether) {
-            tier = 1;
-        } else if (msg.value >= 1 ether && msg.value < 10 ether) {
-            tier = 2;
-        } else if (msg.value >= 10 ether) {
+        if (msg.value >= 10) {
             tier = 3;
+        } else if (msg.value >= 1) {
+            tier = 2;
+        } else if (msg.value >= 0.1) {
+            tier = 1;
+        } else if (msg.value < 0.1) {
+            revert("Minimum price 0.1 ETH");
         }
         _pay(
             projectId, //uint256 _projectId,`
@@ -96,6 +98,10 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
         for (uint256 i = 0; i < _to.length; i++) {
             ownerMint(_to[i], _tiers[i]);
         }
+    }
+
+    function setBaseUri(string memory _baseUri) external onlyOwner {
+        baseUri = _baseUri;
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
