@@ -40,7 +40,9 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
 
     function _mintOne(address _to, uint256 _tier) internal nonReentrant {
         require(block.timestamp < deadline, "Deadline over");
+        require(_tier > 0 && _tier < 4, "Tier out of range");
         uint256 tokenId = totalSupply + 1;
+        tiers[tokenId] = _tier;
         unchecked {
             ++totalSupply;
         }
