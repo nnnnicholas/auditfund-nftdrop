@@ -59,7 +59,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
             tier = 2;
         } else if (msg.value >= 0.1 ether) {
             tier = 1;
-        } else if (msg.value < 0.1 ether) {
+        } else {
             revert("Minimum price 0.1 ETH");
         }
         _pay(
