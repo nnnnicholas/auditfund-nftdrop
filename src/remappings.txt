@@ -1,0 +1,11 @@
+juice-contracts-v2/=lib/juice-contracts-v2/contracts/
+openzeppelin-contracts/=lib/juice-contracts-v2/lib/openzeppelin-contracts/
+chainlink/=lib/juice-contracts-v2/lib/chainlink/
+
+ds-test/=lib/forge-std/lib/ds-test/src/
+forge-std/=lib/forge-std/src/
+solmate/=lib/solmate/src/
+prb-math/=lib/juice-contracts-v2/lib/prb-math/contracts/
+
+@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
+openzeppelin-contracts/=lib/openzeppelin-contracts/

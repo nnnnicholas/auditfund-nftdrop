@@ -1,14 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-contract NFT {
-    uint256 public number;
+import {ERC721} from "solmate/tokens/ERC721.sol";
 
-    function setNumber(uint256 newNumber) public {
-        number = newNumber;
-    }
+contract NFT is ERC721 {
 
-    function increment() public {
-        number++;
+mapping (uint256 => string) public tokenURIs;
+
+    constructor() ERC721("NFT Rewards Audit Fund", "AUDIT") {}
+
+    function tokenURI(uint256 id) public view override returns (string memory) {
+        return "https://example.com";
     }
 }
