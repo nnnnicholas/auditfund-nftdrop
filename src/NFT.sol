@@ -6,6 +6,11 @@ import "juice-contracts-v2/JBETHERC20ProjectPayer.sol";
 import {ReentrancyGuard} from "solmate/utils/ReentrancyGuard.sol";
 import {Strings} from "openzeppelin-contracts/utils/Strings.sol";
 
+// Custom Errors
+error LENGTH_MISMATCH();
+error MINT_DEADLINE_REACHED();
+error TIER_OUT_OF_RANGE();
+
 contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
     mapping(uint256 => uint256) public tierOf;
     uint256 private immutable projectId;
@@ -49,8 +54,11 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
     }
 
     function _mintOne(address _to, uint256 _tier) internal {
-        require(block.timestamp < deadline, "Deadline over");
-        require(_tier > 0 && _tier < 4, "Tier out of range");
+        if (block.timestamp >= deadline)
+          revert MINT_DEADLINE_REACHED();
+
+        if (_tier == 0 ||_tier >= 4)
+          revert TIER_OUT_OF_RANGE();
         _mint(_to, _tier);
     }
 
@@ -89,16 +97,20 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
         _mint(_to, _tier);
     }
 
-    function ownerBatchMint(address[] memory _to, uint256[] memory _tiers)
+    function ownerBatchMint(address[] calldata _to, uint256[] calldata _tiers)
         external
         onlyOwner
     {
-        require(
-            _to.length == _tiers.length,
-            "Recipients and tiers must be same length"
-        );
-        for (uint256 i = 0; i < _to.length; i++) {
+        if (_to.length != _tiers.length)
+          revert LENGTH_MISMATCH();
+
+        // save a local reference to save gas
+        uint256 recipientLength = _to.length;
+        for (uint256 i = 0; i < recipientLength;) {
             ownerMint(_to[i], _tiers[i]);
+            unchecked {
+                ++ i;
+            }
         }
     }
 
@@ -124,3 +136,4 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
             ERC721.supportsInterface(interfaceId);
     }
 }
+
