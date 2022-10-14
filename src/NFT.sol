@@ -97,13 +97,16 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
         _mint(_to, _tier);
     }
 
-    function ownerBatchMint(address[] memory _to, uint256[] memory _tiers)
+    function ownerBatchMint(address[] calldata _to, uint256[] calldata _tiers)
         external
         onlyOwner
     {
         if (_to.length != _tiers.length)
           revert LENGTH_MISMATCH();
-        for (uint256 i = 0; i < _to.length;) {
+
+        // save a local reference to save gas
+        uint256 recipientLength = _to.length;
+        for (uint256 i = 0; i < recipientLength;) {
             ownerMint(_to[i], _tiers[i]);
             unchecked {
                 ++ i;
