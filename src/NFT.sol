@@ -7,7 +7,7 @@ import {ReentrancyGuard} from "solmate/utils/ReentrancyGuard.sol";
 import {Strings} from "openzeppelin-contracts/utils/Strings.sol";
 
 contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
-    mapping(uint256 => uint256) public tierOf; // TODO rename tierOf
+    mapping(uint256 => uint256) public tierOf;
     uint256 private immutable projectId;
     string public baseUri;
     uint256 public totalSupply;
@@ -30,7 +30,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
             "",
             false,
             IJBDirectory(0xCc8f7a89d89c2AB3559f484E0C656423E979ac9C),
-            address(this)
+            msg.sender
         )
     {
         // TODO fix ipfs ^^
@@ -103,7 +103,10 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
-        return string(abi.encodePacked(baseUri, "/", Strings.toString(tierOf[id])));
+        return
+            string(
+                abi.encodePacked(baseUri, "/", Strings.toString(tierOf[id]))
+            );
     }
 
     function supportsInterface(bytes4 interfaceId)
