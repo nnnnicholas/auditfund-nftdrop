@@ -18,7 +18,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
         string memory _symbol, // AUDIT
         uint256 _projectId, // 256
         address _beneficiary, // 0xb0a1b2f7f7a2093da2247ed16f0c06cf02ce164f (safe.auditfund.eth)
-        string memory _baseUri, // IPFS directory containing metadata for 3 tiers Qmd681A6CHQRvqfRQpWUhvsD43H5NyJmhsLmZz9r5fR34R
+        string memory _baseUri, // IPFS directory containing metadata for 3 tiers QmXQoVyXbCt1ccjAExKjVLcamGgr2USLftNGEWx4ZzmGpi
         uint256 _deadline // 1657972800 last time it'll be July 15 anywhere in the world
     )
         ERC721(_name, _symbol)
