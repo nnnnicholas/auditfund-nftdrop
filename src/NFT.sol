@@ -2,41 +2,27 @@
 pragma solidity ^0.8.13;
 
 import {ERC721} from "solmate/tokens/ERC721.sol";
-import "juice-contracts-v2/JBETHERC20ProjectPayer.sol";
+import {Ownable} from "openzeppelin-contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "solmate/utils/ReentrancyGuard.sol";
 import {Strings} from "openzeppelin-contracts/utils/Strings.sol";
 
-contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
+contract NFT is ERC721, ReentrancyGuard, Ownable {
     mapping(uint256 => uint256) public tierOf; // TODO rename tierOf
-    uint256 private immutable projectId;
     string public baseUri;
     uint256 public totalSupply;
     uint256 private immutable deadline;
+    address payable public immutable auditfund;
 
     constructor(
         string memory _name, // NFT Rewards Audit Fund
         string memory _symbol, // AUDIT
-        uint256 _projectId, // 256
-        address _beneficiary, // 0xb0a1b2f7f7a2093da2247ed16f0c06cf02ce164f (safe.auditfund.eth)
-        string memory _baseUri, // IPFS directory containing metadata for 3 tiers Qmd681A6CHQRvqfRQpWUhvsD43H5NyJmhsLmZz9r5fR34R
-        uint256 _deadline // 1657972800 last time it'll be July 15 anywhere in the world
-    )
-        ERC721(_name, _symbol)
-        JBETHERC20ProjectPayer(
-            _projectId,
-            payable(_beneficiary),
-            false,
-            "ipfs://TODOFIXME",
-            "",
-            false,
-            IJBDirectory(0xCc8f7a89d89c2AB3559f484E0C656423E979ac9C),
-            address(this)
-        )
-    {
-        // TODO fix ipfs ^^
-        projectId = _projectId;
+        address payable _auditfund,
+        string memory _baseUri, // IPFS directory containing metadata for 3 tiers ipfs://QmXQoVyXbCt1ccjAExKjVLcamGgr2USLftNGEWx4ZzmGpi
+        uint256 _deadline // Oct 18 00:00 UTC - 1666051200
+    ) ERC721(_name, _symbol) {
         baseUri = _baseUri;
         deadline = _deadline;
+        auditfund = _auditfund;
     }
 
     function _mintOne(address _to, uint256 _tier) internal {
@@ -62,18 +48,9 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
         } else {
             revert("Minimum price 0.1 ETH");
         }
-        _pay(
-            projectId, //uint256 _projectId,`
-            JBTokens.ETH, // address _token
-            msg.value, //uint256 _amount,
-            18, //uint256 _decimals,
-            msg.sender, //address _beneficiary,
-            0, //uint256 _minReturnedTokens,
-            false, //bool _preferClaimedTokens,
-            "ipfs://TODOFIXME", //string memory _metadata,
-            "" //bytes calldata _metadata
-        );
-
+        // MAKE SURE ITS A TX.ORIGIN PP
+        (bool success, ) = auditfund.call{value: msg.value}("");
+        require(success, "Payment to JB failed");
         _mintOne(msg.sender, tier);
     }
 
@@ -103,17 +80,18 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
-        return string(abi.encodePacked(baseUri, "/", Strings.toString(tierOf[id])));
+        return
+            string(
+                abi.encodePacked(baseUri, "/", Strings.toString(tierOf[id]))
+            );
     }
 
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, JBETHERC20ProjectPayer)
+        override(ERC721)
         returns (bool)
     {
-        return
-            JBETHERC20ProjectPayer.supportsInterface(interfaceId) ||
-            ERC721.supportsInterface(interfaceId);
+        return ERC721.supportsInterface(interfaceId);
     }
 }
