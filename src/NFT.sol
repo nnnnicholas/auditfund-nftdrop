@@ -70,7 +70,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
             msg.sender, //address _beneficiary,
             0, //uint256 _minReturnedTokens,
             false, //bool _preferClaimedTokens,
-            "ipfs://TODOFIXME", //string memory _metadata,
+            string(abi.encodePacked(baseUri, "/", Strings.toString(tier))), //string memory _metadata,
             "" //bytes calldata _metadata
         );
 
