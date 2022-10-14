@@ -8,7 +8,8 @@ import "juice-contracts-v2/interfaces/IJBTokenStore.sol";
 
 contract NFTTest is Test {
     NFT public nft;
-    IJBTokenStore tokenStore = IJBTokenStore(0xCBB8e16d998161AdB20465830107ca298995f371);
+    IJBTokenStore tokenStore =
+        IJBTokenStore(0xCBB8e16d998161AdB20465830107ca298995f371);
     IJBSingleTokenPaymentTerminalStore singleTokenPaymentTerminalStore =
         IJBSingleTokenPaymentTerminalStore(
             0x96a594ABE6B910E05E486b63B32fFe29DA5d33f7
@@ -96,20 +97,23 @@ contract NFTTest is Test {
     }
 
     // Check minter received project tokens
-function testTokensIssuedToMinter() public {
+    function testTokensIssuedToMinter() public {
         uint256 balance = tokenStore.balanceOf(address(this), 256); // balance before
         nft.mint{value: uint256(0.1 ether)}();
         uint256 balanceAfter = tokenStore.balanceOf(address(this), 256); // balance after
         assertEq(balanceAfter, balance + 1_000_000 * 0.1 ether);
     }
 
+    function testOwnerMint(address _to, uint256 _tier) public {
+        vm.assume(_tier == 1 || _tier == 2 || _tier == 3);
+        vm.assume(_to != address(0));
+        nft.ownerMint(_to, _tier);
+        assertEq(nft.balanceOf(_to), 1);
+        assertEq(nft.ownerOf(nft.totalSupply()), _to);
+        assertEq(nft.tierOf(nft.totalSupply()), _tier);
+    }
 
-
-    // function testOwnerMint(address _to, uint256 _tier) public {
-    //     vm.assume(_tier == 1 || _tier == 2 || _tier == 3);
-    //     nft.ownerMint(_to, _tier);
-    //     assertEq(nft.balanceOf(_to), 1);
-    //     assertEq(nft.ownerOf(nft.totalSupply()), _to);
-    //     assertEq(nft.tierOf(nft.totalSupply()), _tier);
-    // }
+    // batch owner mint
+    // Check pay memo is correct
+    
 }
