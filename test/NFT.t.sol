@@ -12,9 +12,9 @@ contract NFTTest is Test {
             "NFT Rewards Audit Fund",
             "AUDIT",
             256,
-            0xb0a1b2f7f7a2093da2247ed16f0c06cf02ce164f,
-            "IPFS directory containing metadata for 3 tiers Qmd681A6CHQRvqfRQpWUhvsD43H5NyJmhsLmZz9r5fR34R",
-            1657972800
+            address(0),
+            "ipfs://QmXQoVyXbCt1ccjAExKjVLcamGgr2USLftNGEWx4ZzmGpi",
+            1666051200
         );
     }
 
