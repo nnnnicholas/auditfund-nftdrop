@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
 import {ERC721} from "solmate/tokens/ERC721.sol";
@@ -18,7 +18,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
         string memory _symbol, // AUDIT
         uint256 _projectId, // 256
         address _beneficiary, // 0xb0a1b2f7f7a2093da2247ed16f0c06cf02ce164f (safe.auditfund.eth)
-        string memory _baseUri, // IPFS directory containing metadata for 3 tiers for ex. QmREvFUJiX8TNhJrqkE7T9v5zo7avbKUtggLccoonf4RQ3
+        string memory _baseUri, // IPFS directory containing metadata for 3 tiers Qmd681A6CHQRvqfRQpWUhvsD43H5NyJmhsLmZz9r5fR34R
         uint256 _deadline // 1657972800 last time it'll be July 15 anywhere in the world
     )
         ERC721(_name, _symbol)
@@ -39,7 +39,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
         deadline = _deadline;
     }
 
-    function _mintOne(address _to, uint256 _tier) internal nonReentrant {
+    function _mintOne(address _to, uint256 _tier) internal {
         require(block.timestamp < deadline, "Deadline over");
         require(_tier > 0 && _tier < 4, "Tier out of range");
         uint256 tokenId = totalSupply + 1;
@@ -103,7 +103,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
-        return string(abi.encodePacked(baseUri, Strings.toString(tierOf[id])));
+        return string(abi.encodePacked(baseUri, "/", Strings.toString(tierOf[id])));
     }
 
     function supportsInterface(bytes4 interfaceId)
