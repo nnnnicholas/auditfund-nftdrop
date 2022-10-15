@@ -41,6 +41,7 @@ contract NFTTest is Test {
         uint256(3)
     ];
     string baseUri = "ipfs://QmXQoVyXbCt1ccjAExKjVLcamGgr2USLftNGEWx4ZzmGpi";
+    string imageUri = "ipfs://QmT3SQdAQojLUo11ugU2rRPUWvhSQZeZupFSFJq9xGAX7G";
 
     function setUp() public {
         nft = new NFT(
@@ -49,6 +50,7 @@ contract NFTTest is Test {
             256,
             address(0),
             baseUri,
+            imageUri,
             1666051200
         );
     }
