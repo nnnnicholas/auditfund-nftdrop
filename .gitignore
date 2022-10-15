@@ -3,3 +3,5 @@ out/
 .vscode
 .idea
 .DS_Store
+.mnemonic
+keystore/
