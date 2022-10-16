@@ -12,7 +12,7 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
     string public baseUri;
     string private imageUri;
     uint256 public totalSupply;
-    uint256 private immutable deadline;
+    uint256 public immutable deadline;
 
     constructor(
         string memory _name, // NFT Rewards Audit Fund
@@ -106,6 +106,10 @@ contract NFT is ERC721, ReentrancyGuard, JBETHERC20ProjectPayer {
 
     function setBaseUri(string memory _baseUri) external onlyOwner {
         baseUri = _baseUri;
+    }
+
+    function setImageUri(string memory _imageUri) external onlyOwner {
+        imageUri = _imageUri;
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
