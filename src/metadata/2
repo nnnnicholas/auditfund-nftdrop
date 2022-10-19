@@ -1,5 +1,15 @@
 {
     "name": "Chad Auditor Banny",
-    "description":"Chad Auditor Banny is an experienced auditor who has seen it all. Uninitialized multisig libraries? Been there. Bridges secured by falsifiable merkle roots? Been there. Chad Auditor Banny is your Banny for a clean contract that delivers.",
-    "image": "ipfs://QmT3SQdAQojLUo11ugU2rRPUWvhSQZeZupFSFJq9xGAX7G/2.png"
+    "description": "Chad Auditor Banny is an experienced auditor who has seen it all. Uninitialized multisig libraries? Been there. Bridges secured by falsifiable merkle roots? Been there. Chad Auditor Banny is your Banny for a clean contract that delivers.",
+    "image": "ipfs://QmT3SQdAQojLUo11ugU2rRPUWvhSQZeZupFSFJq9xGAX7G/2.png",
+    "attributes": [
+        {
+            "trait_type": "Level",
+            "value": 2
+        },
+        {
+            "trait_type": "Type",
+            "value": "Chad"
+        }
+    ]
 }

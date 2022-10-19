@@ -1,5 +1,15 @@
 {
     "name": "GigaChad Auditor Banny",
     "description": "GigaChad Auditor Banny is an unstoppable force of pure auditing energy. He is the most powerful auditor in the world. He is the only auditor in the world. He is the world. He is the auditor. He is the GigaChad. He is the Banny. He is the GigaChad Auditor Banny.",
-    "image": "ipfs://QmT3SQdAQojLUo11ugU2rRPUWvhSQZeZupFSFJq9xGAX7G/3.png"
+    "image": "ipfs://QmT3SQdAQojLUo11ugU2rRPUWvhSQZeZupFSFJq9xGAX7G/3.png",
+    "attributes": [
+        {
+            "trait_type": "Level",
+            "value": 3
+        },
+        {
+            "trait_type": "Type",
+            "value": "GigaChad"
+        }
+    ]
 }
